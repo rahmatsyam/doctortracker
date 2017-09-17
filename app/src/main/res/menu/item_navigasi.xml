@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/nav_listPasien"
+            android:icon="@drawable/ic_menu_list"
+            android:checked="false"
+            android:title="List Pasien"/>
+
+        <item
+            android:id="@+id/nav_tambahKlinik"
+            android:icon="@drawable/ic_menu_klinik"
+            android:checked="false"
+            android:title="Tambah Klinik"/>
+
+        <item
+            android:id="@+id/nav_tmbhPasien"
+            android:icon="@drawable/ic_menu_add"
+            android:checked="false"
+            android:title="Tambah Pasien"/>
+        <item
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/ic_menu_signout"
+            android:checked="false"
+            android:title="Sign Out" />
+
+
+    </group>
+</menu>

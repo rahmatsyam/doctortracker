@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">Doctor Tracker</string>
+    <string name="textView1">DOKTER</string>
+    <string name="textView2">PASIEN</string>
+    <string name="openDrawer">Drawer dibuka</string>
+    <string name="closeDrawer">Drawer ditutup</string>
+    <string name="btn_signDr">Login</string>
+    <string name="have_account">Sudah memiliki akun? Klik disini</string>
+    <string name="have_accountpasien">Sudah memiliki akun? Log In Disini</string>
+
+
+    <string name="title_activity_maps_doctor">Lokasi Praktik</string>
+    <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="password">Password</string>
+    <string name="lbl_register">Belum Memiliki Akun?Daftar Disini</string>
+
+    <string name="yeah">Selamat datang di \nDoctorTracker</string>
+
+    <string name="btn_accept">Got It</string>
+    <string name="app_intro_skip">Skip</string>
+
+    <string name="introduction">  DoctorTracker merupakan aplikasi android khusus yang dibangun untuk
+                        memudahkan dokter dan pasien.Pasien akan mudah menemukan lokasi praktek
+                        dokter yang dicari dan dapat langsung mendaftar  melalui aplikasi ini.
+                        Dokter akan mudah mengetahui pasien yang mendaftar di kliniknya.</string>
+
+    <string name="find_data">Data ditemukan</string>
+    <string name="error_network">Jaringan bermasalah,coba lagi</string>
+    <string name="no_data">Data tidak ditemukan</string>
+
+
+    <string name="generic_server_down">down lagi </string>
+    <string name="no_internet">Tak ada koneksi internet</string>
+    <string name="generic_error">Bermasalah pada server</string>
+    <string name="generic_server_timeout">Waktu koneksi berhenti</string>
+    <string name="auth_failed">Autentikasi gagal</string>
+    <string name="no_network_connection">Tak ada koneksi jaringan</string>
+    <string name="parsing_failed">Parsing data gagal</string>
+
+    <string name="spinner_title">pinner</string>
+
+    <string name="txt_keterangan_peta">"Silahkan pilih kategori dokter yang ingin dimunculkan"
+                                        "di dalam peta"</string>
+    <string name="txt_s">"Jumlah antrian"
+                            \n"saat ini"</string>
+    <string name="title_activity_maps">Lokasi Praktek</string>
+
+    <!--Layout TambahLokasi -->
+
+</resources>

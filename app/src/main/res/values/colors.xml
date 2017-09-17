@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00bcd4</color>
+    <color name="colorPrimaryDark">#9AD4E6</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorEditText">#FFF</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="blue_grey">#5E7C8B</color>
+    <color name="transparent">#00000000</color>
+    <color name="textPrimary">#212121</color>
+    <color name="greeny">#00BFA5</color>
+    <color name="greena">#036e64</color>
+    <color name="Divider">#333333</color>
+    <color name="pink">#EB1460</color>
+    <color name="indigo">#3F51B5</color>
+    <color name="lime">#CDDC39</color>
+
+
+
+</resources>
