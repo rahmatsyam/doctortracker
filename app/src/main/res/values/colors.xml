@@ -8,7 +8,9 @@
     <color name="blue_grey">#5E7C8B</color>
     <color name="transparent">#00000000</color>
     <color name="textPrimary">#212121</color>
+    <color name="colorBlack">#212121</color>
     <color name="greeny">#00BFA5</color>
+    <color name="grey">#EEEEEE</color>
     <color name="greena">#036e64</color>
     <color name="Divider">#333333</color>
     <color name="pink">#EB1460</color>

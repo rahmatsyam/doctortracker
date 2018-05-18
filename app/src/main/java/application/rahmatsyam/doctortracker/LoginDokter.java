@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,22 +34,22 @@ public class LoginDokter extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_dokter);
+        setContentView(R.layout.activity_login_dokter);
 
 
         session = new SessionManager(getApplicationContext());
-        Toasty.info(getApplicationContext(), "User Login Status: " +
-               session.isLoggedIn(), Toast.LENGTH_SHORT, true).show();
 
         if (android.os.Build.VERSION.SDK_INT > 15) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.enableDefaults();
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Button Login = (Button) findViewById(R.id.btn_signDr);
-        email_dokter = (EditText) findViewById(R.id.editText);
-        password_dokter = (EditText) findViewById(R.id.editText2);
-        verifi = (TextView) findViewById(R.id.verifi);
+        final Button Login = findViewById(R.id.btn_signDr);
+        email_dokter = findViewById(R.id.editText);
+        password_dokter = findViewById(R.id.editText2);
+        verifi = findViewById(R.id.verifi);
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +62,11 @@ public class LoginDokter extends AppCompatActivity {
                         && password_dokter.getText().toString().trim().length() > 0)
                     new AmbilData().execute();
                 else {
-                    alert.showAlertDialog(LoginDokter.this, "Field tidak boleh kosong...!",
-                            "Silahkan isi username dan password");
+                    Toasty.info(getApplicationContext(), "Silahkan isi username dan password", Toast.LENGTH_SHORT).show();
+
                 }
+
+
             }
         });
 
@@ -92,50 +94,49 @@ public class LoginDokter extends AppCompatActivity {
         }
 
         protected String doInBackground(String... arg0) {
-        JSONParser jParser = new JSONParser();
-        JSONObject json = jParser.getJSONFromUrl(url);
-        try {
+            JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.getJSONFromUrl(url);
+            try {
 
 
-            success = json.getString("success");
-            Log.e("error", "nilai sukses=" + success);
-            JSONArray hasil = json.getJSONArray("login");
-            if (success.equals("1")) {
-                for (int i = 0; i < hasil.length(); i++) {
-                    JSONObject c = hasil.getJSONObject(i);
+                success = json.getString("success");
+                JSONArray hasil = json.getJSONArray("login");
+                if (success.equals("1")) {
+                    for (int i = 0; i < hasil.length(); i++) {
+                        JSONObject c = hasil.getJSONObject(i);
 
-                    //Storing each json
-                    String id_dokter = c.getString("id_dokter").trim();
-                    String id_lokasi = c.getString("id_lokasi").trim();
-                    String nama_dokter = c.getString("nama_dokter").trim();
-                    String email_dokter = c.getString("email_dokter").trim();
-                    session.createLoginSession(id_dokter, id_lokasi, nama_dokter, email_dokter);
+                        //Storing each json
+                        String id_dokter = c.getString("id_dokter").trim();
+                        String id_lokasi = c.getString("id_lokasi").trim();
+                        String nama_dokter = c.getString("nama_dokter").trim();
+                        String email_dokter = c.getString("email_dokter").trim();
+                        session.createLoginSession(id_dokter, id_lokasi, nama_dokter, email_dokter);
 
+
+                    }
+                } else {
 
                 }
-            } else {
-                Log.e("Error", "tidak bisa ambil data 0");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                //Log.e("Error", "Tidak bisa ambil data 1");
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Error", "Tidak bisa ambil data 1");
+            return null;
         }
-        return null;
-    }
 
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        pDialog.dismiss();
-        if (success.equals("1")) {
-            a = new Intent(LoginDokter.this, NavigasiDokter.class);
-            startActivity(a);
-            finish();
-        } else {
-            alert.showAlertDialog(LoginDokter.this, "Login gagal..", "Email atau Password salah");
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pDialog.dismiss();
+            if (success.equals("1")) {
+                a = new Intent(LoginDokter.this, NavigasiDokter.class);
+                startActivity(a);
+                finish();
+            } else {
+                alert.showAlertDialog(LoginDokter.this, "Login gagal..", "Email atau Password salah");
+            }
         }
-    }
 
-}
+    }
 
 
     @Override
@@ -144,6 +145,20 @@ public class LoginDokter extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            session.checkLogin();
+            Intent i = new Intent(getApplicationContext(), MenuPilihan.class);
+            startActivity(i);
+            finish();
+        }
+        return true;
+
+
     }
 
 }

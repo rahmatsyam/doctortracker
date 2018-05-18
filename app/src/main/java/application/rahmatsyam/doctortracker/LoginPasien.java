@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,10 +46,10 @@ public class LoginPasien extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_pasien);
+        setContentView(R.layout.activity_login_pasien);
 
-        editTextUser = (EditText) findViewById(R.id.editTextUser);
-        editTextPass = (EditText) findViewById(R.id.editTextPass);
+        editTextUser = findViewById(R.id.editTextUser);
+        editTextPass = findViewById(R.id.editTextPass);
 
         session = new SessionManager(getApplicationContext());
         Toasty.info(getApplicationContext(), "User Login Status: " +
@@ -60,8 +60,9 @@ public class LoginPasien extends AppCompatActivity {
             StrictMode.enableDefaults();
         }
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button signPasienButton = (Button) findViewById(R.id.btn_signPasien);
+        Button signPasienButton = findViewById(R.id.btn_signPasien);
         signPasienButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +86,7 @@ public class LoginPasien extends AppCompatActivity {
             }
         });
 
-        TextView regPasien = (TextView) findViewById(R.id.txt_regPasien);
+        TextView regPasien = findViewById(R.id.txt_regPasien);
         regPasien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +120,6 @@ public class LoginPasien extends AppCompatActivity {
                             JSONObject json = jParser.getJSONFromUrl(apilogin);
                             try {
                                 berhasil = json.getString("berhasil");
-                                Log.e("error", "nilai sukses=" + berhasil);
                                 JSONArray hasil = json.getJSONArray("loginpasien");
                                 if (berhasil.equals("1")) {
                                     for (int i = 0; i < hasil.length(); i++) {
@@ -131,11 +131,11 @@ public class LoginPasien extends AppCompatActivity {
 
                                     }
                                 } else {
-                                    Log.e("Error", "tidak bisa ambil data 0");
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e("Error", "Tidak bisa ambil data 1");
+
                             }
 
                         } else {
@@ -187,6 +187,21 @@ public class LoginPasien extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            session.checkLoginPasien();
+            Intent i = new Intent(getApplicationContext(), MenuPilihan.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
+        return true;
     }
 
 

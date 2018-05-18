@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import application.rahmatsyam.doctortracker.config.Config;
+import es.dmoral.toasty.Toasty;
 
 
 /**
@@ -60,7 +60,7 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
     public static final String KEY_LONGITUDE = "longitude";
 
     static EditText jam_buka, jam_tutup;
-    EditText nama_praktek, alamat_praktek, noTlpn_praktek, izin_praktek, hari_praktek;
+    public EditText nama_praktek, alamat_praktek, noTlpn_praktek, izin_praktek, hari_praktek;
     private Button Register;
     private TimePickerDialog timeEventPicker;
     private TimePickerDialog timeEventPicker2;
@@ -69,43 +69,43 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tambah_lokasi);
-        tambah_lokasi = (LinearLayout) findViewById(R.id.tambah_lokasi);
+        setContentView(R.layout.activity_tambah_lokasi);
+        tambah_lokasi = findViewById(R.id.tambah_lokasi);
 
-        nama_praktek = (EditText) findViewById(R.id.txt_namaPraktek);
-        alamat_praktek = (EditText) findViewById(R.id.txt_alamatPraktek);
-        noTlpn_praktek = (EditText) findViewById(R.id.txt_noTelepon);
-        izin_praktek = (EditText) findViewById(R.id.txt_izinPraktek);
-        hari_praktek = (EditText) findViewById(R.id.txt_hariPraktek);
+        nama_praktek = findViewById(R.id.txt_namaPraktek);
+        alamat_praktek = findViewById(R.id.txt_alamatPraktek);
+        noTlpn_praktek = findViewById(R.id.txt_noTelepon);
+        izin_praktek = findViewById(R.id.txt_izinPraktek);
+        hari_praktek = findViewById(R.id.txt_hariPraktek);
 
-        Register = (Button) findViewById(R.id.btn_regLokasi);
+        Register = findViewById(R.id.btn_regLokasi);
         Register.setOnClickListener(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        jam_buka = (EditText) findViewById(R.id.txt_jamBuka);
+        jam_buka = findViewById(R.id.txt_jamBuka);
         jam_buka.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setTimeField();
-                timeEventPicker.setTitle("Select time");
+                timeEventPicker.setTitle("Pilih Waktu");
                 timeEventPicker.show();
             }
         });
 
-        jam_tutup = (EditText) findViewById(R.id.txt_jamTutup);
+        jam_tutup = findViewById(R.id.txt_jamTutup);
         jam_tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTimeField2();
-                timeEventPicker2.setTitle("Select time");
+                setTimeField();
+                timeEventPicker2.setTitle("Pilih Waktu");
                 timeEventPicker2.show();
             }
 
         });
 
 
-        latitude = (EditText) findViewById(R.id.latitudeTxt);
-        longitude = (EditText) findViewById(R.id.longitudeTxt);
+        latitude = findViewById(R.id.latitudeTxt);
+        longitude = findViewById(R.id.longitudeTxt);
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locListener = new MyLocationListener();
 
@@ -127,32 +127,25 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
         Calendar newCalendar = Calendar.getInstance();
         int hours = newCalendar.get(Calendar.HOUR_OF_DAY);
         int minutes = newCalendar.get(Calendar.MINUTE);
-        Log.i("Tag jam", "" + newCalendar.getTime());
+
         timeEventPicker = new TimePickerDialog(TambahLokasi.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 jam_buka.setText(String.format("%02d:%02d", hourOfDay, minute));
+
             }
         }, hours, minutes, true);
-        timeEventPicker.show();
 
-    }
 
-    private void setTimeField2() {
-        final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.UK);
-        Calendar newCalendar = Calendar.getInstance();
-        int hours = newCalendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = newCalendar.get(Calendar.MINUTE);
-        Log.i("Tag jam", "" + newCalendar.getTime());
         timeEventPicker2 = new TimePickerDialog(TambahLokasi.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 jam_tutup.setText(String.format("%02d:%02d", hourOfDay, minute));
             }
         }, hours, minutes, true);
-        timeEventPicker2.show();
 
     }
+
 
     private class MyLocationListener implements LocationListener {
 
@@ -160,9 +153,10 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
             if (loc != null) {
                 latitude.setText(String.valueOf(loc.getLatitude()));
                 longitude.setText(String.valueOf(loc.getLongitude()));
-                Toast.makeText(getBaseContext(), "Location Changed : Lat " + loc.getLatitude() +
-                        "lgt: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+
             }
+
+
         }
 
         public void onProviderDisabled(String arg0) {
@@ -181,6 +175,21 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         lm.removeUpdates(locListener);
         lm = null;
+
+    }
+
+
+    private void regLokasi() {
+
+
+        if (nama_praktek.getText().toString().trim().length() > 0 && alamat_praktek.getText().toString().trim().length() > 0 && noTlpn_praktek.getText().toString().trim().length() > 0 &&
+                izin_praktek.getText().toString().trim().length() > 0 && hari_praktek.getText().toString().trim().length() > 0 && jam_buka.getText().toString().trim().length() > 0 && jam_tutup.getText().toString().trim().length() > 0) {
+            Snack("Fungsi ini sedang disable ^^");
+
+        } else {
+            Toasty.info(getApplicationContext(), "Wajib diisi", Toast.LENGTH_LONG).show();
+
+        }
 
     }
 
@@ -235,28 +244,28 @@ public class TambahLokasi extends AppCompatActivity implements View.OnClickListe
         Snackbar snackbar = Snackbar.make(tambah_lokasi, content, Snackbar.LENGTH_LONG)
                 .setAction("Action", null);
         View snackBarView = snackbar.getView();
-        snackBarView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+        snackBarView.setBackgroundColor(getResources().getColor(R.color.colorBlack));
         snackbar.show();
     }
 
+
     @Override
     public void onClick(View v) {
+
+
         if (v == Register) {
-            try {
-                registerLokasi();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            regLokasi();
+
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
 
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // LocationManager.removeUpdates(this);
+
             finish();
         }
         return true;

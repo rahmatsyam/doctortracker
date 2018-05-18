@@ -5,22 +5,22 @@
         <item
             android:id="@+id/nav_lisDokter"
             android:checked="false"
-            android:icon="@drawable/ic_menu_list"
+            android:icon="@drawable/ic_menu_list_24dp"
             android:title="List Dokter" />
         <item
             android:id="@+id/nav_ceklokasi"
             android:checked="false"
-            android:icon="@drawable/ic_menu_lokasi"
+            android:icon="@drawable/ic_menu_lokasi_24dp"
             android:title="Lihat Lokasi" />
         <item
             android:id="@+id/nav_no_antrian"
             android:checked="false"
-            android:icon="@drawable/ic_menu_daftar"
+            android:icon="@drawable/ic_menu_daftar_24dp"
             android:title="Cek No.Antrian" />
         <item
             android:id="@+id/nav_logOut"
             android:checked="false"
-            android:icon="@drawable/ic_menu_signout"
+            android:icon="@drawable/ic_menu_signout_24dp"
             android:title="Sign Out" />
 
     </group>

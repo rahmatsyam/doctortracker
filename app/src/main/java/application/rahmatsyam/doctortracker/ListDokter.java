@@ -5,7 +5,9 @@ package application.rahmatsyam.doctortracker;
  */
 
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -75,12 +77,12 @@ public class ListDokter extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.list_dokter);
+        setContentView(R.layout.activity_list_dokter);
 
 
         GetDataAdapter3 = new ArrayList<>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView2);
+        recyclerView = findViewById(R.id.recyclerView2);
 
         recyclerViewadapter = new DokterAdapter(GetDataAdapter3, this);
 
@@ -90,10 +92,16 @@ public class ListDokter extends AppCompatActivity {
         recyclerViewlayoutManager = new LinearLayoutManager(this);
 
         recyclerView.setLayoutManager(recyclerViewlayoutManager);
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.drawable_divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        //recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(),DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new application.rahmatsyam.doctortracker.DividerItemDecoration(getApplicationContext(),R.drawable.custom_theme_line));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh2);
+        mySwipeRefreshLayout = findViewById(R.id.swiperefresh2);
         mySwipeRefreshLayout.setColorSchemeResources(R.color.pink, R.color.indigo, R.color.lime);
         mySwipeRefreshLayout.setRefreshing(true);
         JSON_DATA_WEB_CALL();
@@ -227,15 +235,13 @@ public class ListDokter extends AppCompatActivity {
     }
 
 
-    private boolean filterrong(String newText) {
+    private void filterrong(String newText) {
         final List<GetDataAdapter> filteredModelList = filter(GetDataAdapter3, newText);
         if (filteredModelList.size() > 0) {
             recyclerViewadapter = new DokterAdapter(filteredModelList, this);
             recyclerView.setAdapter(recyclerViewadapter);
-            return true;
         } else {
             Toasty.info(ListDokter.this, "Tidak Ditemukan", Toast.LENGTH_LONG, true).show();
-            return false;
         }
     }
 
@@ -293,7 +299,7 @@ public class ListDokter extends AppCompatActivity {
                 }
         );
 
-        // Build the dialog and show it.
+
         filterDokter = builder.create();
         filterDokter.setCanceledOnTouchOutside(true);
     }

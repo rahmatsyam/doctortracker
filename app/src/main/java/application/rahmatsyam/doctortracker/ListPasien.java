@@ -1,15 +1,19 @@
 package application.rahmatsyam.doctortracker;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -39,6 +43,8 @@ public class ListPasien extends AppCompatActivity implements SearchView.OnQueryT
     RecyclerView.LayoutManager recyclerViewlayoutManager;
     RecyclerView.Adapter recyclerViewadapter;
 
+    private TextView emptyView;
+
 
     SwipeRefreshLayout mySwipeRefreshLayout;
 
@@ -53,28 +59,38 @@ public class ListPasien extends AppCompatActivity implements SearchView.OnQueryT
     JsonArrayRequest jsonArrayRequest;
     RequestQueue requestQueue;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_pasien);
+        setContentView(R.layout.activity_list_pasien);
 
         sessionManager = new SessionManager(getApplicationContext());
-        Log.i("terst", sessionManager.getUserDetails().get(SessionManager.KEY_ID_DOKTER));
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        emptyView = findViewById(R.id.empty_data);
+
+
 
         GetDataAdapter1 = new ArrayList<>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
+        recyclerView = findViewById(R.id.recyclerView1);
         recyclerView.setHasFixedSize(true);
         recyclerViewlayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerViewlayoutManager);
+        
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.drawable_divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
         mySwipeRefreshLayout.setColorSchemeResources(R.color.pink, R.color.indigo, R.color.lime);
         mySwipeRefreshLayout.setRefreshing(true);
+
+
         JSON_DATA_WEB_CALL();
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -85,6 +101,8 @@ public class ListPasien extends AppCompatActivity implements SearchView.OnQueryT
     }
 
     public void JSON_DATA_WEB_CALL() {
+
+
         jsonArrayRequest = new JsonArrayRequest(GET_JSON_DATA_HTTP_URL + "?iddokter=" + sessionManager.getUserDetails().get(SessionManager.KEY_ID_DOKTER), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -99,8 +117,11 @@ public class ListPasien extends AppCompatActivity implements SearchView.OnQueryT
                 mySwipeRefreshLayout.setRefreshing(false);
             }
         });
+
         requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
+
+
     }
 
     public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array) {
@@ -195,6 +216,30 @@ public class ListPasien extends AppCompatActivity implements SearchView.OnQueryT
         recyclerView.setAdapter(recyclerViewadapter);
         recyclerViewadapter.notifyDataSetChanged();
         return filteredModelList;
+    }
+
+    private void checkAdapterIsEmpty () {
+        if (recyclerViewadapter.getItemCount() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
+    }
+
+    protected void setupRecyclerView() {
+    //   recyclerViewadapter = new PasienAdapter(ListPasien.this);
+        recyclerViewadapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                checkAdapterIsEmpty();
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerViewadapter);
+        checkAdapterIsEmpty();
     }
 
 

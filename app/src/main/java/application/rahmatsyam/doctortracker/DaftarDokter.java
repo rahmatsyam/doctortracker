@@ -7,6 +7,7 @@ package application.rahmatsyam.doctortracker;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,9 +33,9 @@ public class DaftarDokter extends AppCompatActivity implements View.OnClickListe
 
     private RelativeLayout daftar_doctor;
 
-    public static final String KEY_NAMA_DOKTER     = "nama_dokter";
-    public static final String KEY_EMAIL_DOKTER    = "email_dokter";
-    public static final String KEY_NOHP_DOKTER     = "nohp_dokter";
+    public static final String KEY_NAMA_DOKTER = "nama_dokter";
+    public static final String KEY_EMAIL_DOKTER = "email_dokter";
+    public static final String KEY_NOHP_DOKTER = "nohp_dokter";
     public static final String KEY_PASSWORD_DOKTER = "password_dokter";
 
     EditText txt_nama_dokter;
@@ -42,7 +43,7 @@ public class DaftarDokter extends AppCompatActivity implements View.OnClickListe
     EditText txt_nohp_dokter;
     EditText txt_password_dokter;
 
-    String nama_dokter, email_dokter,nohp_dokter,password_dokter;
+    String nama_dokter, email_dokter, nohp_dokter, password_dokter;
 
     private Button Register;
 
@@ -50,33 +51,51 @@ public class DaftarDokter extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.daftar_dokter);
-        daftar_doctor = (RelativeLayout) findViewById(R.id.daftar_doctor);
+        setContentView(R.layout.activity_daftar_dokter);
+        daftar_doctor = findViewById(R.id.daftar_doctor);
 
-        txt_nama_dokter     = (EditText) findViewById(R.id.nama_dokter);
-        txt_email_dokter    = (EditText) findViewById(R.id.email_dokter);
-        txt_nohp_dokter     = (EditText) findViewById(R.id.nohp_dokter);
-        txt_password_dokter = (EditText) findViewById(R.id.password_dokter);
+        txt_nama_dokter = findViewById(R.id.nama_dokter);
+        txt_email_dokter = findViewById(R.id.email_dokter);
+        txt_nohp_dokter = findViewById(R.id.nohp_dokter);
+        txt_password_dokter = findViewById(R.id.password_dokter);
 
-        Register = (Button) findViewById(R.id.btn_registerDok);
+        Register = findViewById(R.id.btn_registerDok);
         Register.setOnClickListener(this);
 
-        nama_dokter     = txt_nama_dokter.getText().toString();
-        email_dokter    = txt_email_dokter.getText().toString();
-        nohp_dokter     = txt_nohp_dokter.getText().toString();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void regSementara() {
+
+        nama_dokter = txt_nama_dokter.getText().toString();
+        email_dokter = txt_email_dokter.getText().toString();
+        nohp_dokter = txt_nohp_dokter.getText().toString();
         password_dokter = txt_password_dokter.getText().toString();
+
+        final String strnama_dokter = txt_nama_dokter.getText().toString().trim();
+        final String stremail_dokter = txt_email_dokter.getText().toString().trim();
+        final String strnohp_dokter = txt_nohp_dokter.getText().toString().trim();
+        final String strpassword_dokter = txt_password_dokter.getText().toString().trim();
+
+        if (nama_dokter.equals("") || email_dokter.equals("") || nohp_dokter.equals("") || password_dokter.equals("")) {
+            Toasty.info(getApplicationContext(), "Wajib diisi", Toast.LENGTH_LONG).show();
+        } else {
+            Toasty.info(getApplicationContext(), "Sementara fungsi dimatikan untuk keamanan ^^v", Toast.LENGTH_LONG).show();
+        }
+
     }
 
 
     private void registerDokter() throws JSONException {
 
-        final String strnama_dokter     = txt_nama_dokter.getText().toString().trim();
-        final String stremail_dokter    = txt_email_dokter.getText().toString().trim();
-        final String strnohp_dokter     = txt_nohp_dokter.getText().toString().trim();
+        final String strnama_dokter = txt_nama_dokter.getText().toString().trim();
+        final String stremail_dokter = txt_email_dokter.getText().toString().trim();
+        final String strnohp_dokter = txt_nohp_dokter.getText().toString().trim();
         final String strpassword_dokter = txt_password_dokter.getText().toString().trim();
 
         if (nama_dokter.equals("") || email_dokter.equals("") || nohp_dokter.equals("") || password_dokter.equals("")) {
-            Toasty.error(getApplicationContext(), "Field Tak Boleh Kosong", Toast.LENGTH_LONG).show();
+            Toasty.info(getApplicationContext(), "Wajib Diisi", Toast.LENGTH_LONG).show();
         } else {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.DAFTAR_DOKTER,
                     new Response.Listener<String>() {
@@ -121,11 +140,20 @@ public class DaftarDokter extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == Register) {
-            try {
-                registerDokter();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            regSementara();
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+        }
+        return true;
+
+
+    }
+
 }

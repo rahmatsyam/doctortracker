@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
+import application.rahmatsyam.doctortracker.config.Introduction;
+
 public class MenuPilihan extends AppCompatActivity {
 
 
@@ -21,10 +23,10 @@ public class MenuPilihan extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_pilihan);
+        setContentView(R.layout.activity_menu_pilihan);
 
 
-        CardView dokter = (CardView) findViewById(R.id.cardViewDokter);
+        CardView dokter = findViewById(R.id.cardViewDokter);
         dokter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,7 +35,7 @@ public class MenuPilihan extends AppCompatActivity {
             }
         });
 
-        CardView pasien = (CardView) findViewById(R.id.cardViewPasien);
+        CardView pasien = findViewById(R.id.cardViewPasien);
         pasien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

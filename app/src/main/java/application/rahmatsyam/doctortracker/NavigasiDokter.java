@@ -1,7 +1,6 @@
 package application.rahmatsyam.doctortracker;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,6 +53,7 @@ public class NavigasiDokter extends AppCompatActivity {
 
     EditText txt_nama_pasien, txt_nohp_pasien;
 
+
     Button btn_daftar, btn_tutup;
     Toolbar mytoolbar;
 
@@ -64,7 +62,7 @@ public class NavigasiDokter extends AppCompatActivity {
     SwipeRefreshLayout swipeku;
     ProgressDialog pDialog;
 
-    AlertDialog.Builder dialog;
+    AlertDialog.Builder Builder;
     View dialogView;
 
     String REGISTER_URL = Config.DAFTAR_PASIEN;
@@ -80,12 +78,12 @@ public class NavigasiDokter extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigasi_dokter);
+        setContentView(R.layout.activity_navigasi_dokter);
 
 
         session = new SessionManager(getApplicationContext());
-        Toasty.info(getApplicationContext(), "User Login Status:" +
-                session.isLoggedIn(), Toast.LENGTH_SHORT, true).show();
+       /* Toasty.info(getApplicationContext(), "User Login Status:" +
+                session.isLoggedIn(), Toast.LENGTH_SHORT, true).show(); */
         session.checkLogin();
 
         HashMap<String, String> user = session.getUserDetails();
@@ -95,13 +93,13 @@ public class NavigasiDokter extends AppCompatActivity {
         email_dokter = user.get(SessionManager.KEY_EMAIL_DOKTER);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         update_terbaru = new SimpleDateFormat("d/M/yyyy - HH:mm", Locale.getDefault()).format(new Date());
         tgl_registrasi = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -143,13 +141,13 @@ public class NavigasiDokter extends AppCompatActivity {
 
 
         View navHeaderView = LayoutInflater.from(this).inflate(R.layout.layout_header, navigationView, true);
-        TextView rahsya = (TextView) navHeaderView.findViewById(R.id.namaDokter);
+        TextView rahsya = navHeaderView.findViewById(R.id.namaDokter);
         rahsya.setText(nama_dokter);
-        TextView bb = (TextView) navHeaderView.findViewById(R.id.emailDokter);
+        TextView bb = navHeaderView.findViewById(R.id.emailDokter);
         bb.setText(email_dokter);
 
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout = findViewById(R.id.drawer);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -168,7 +166,7 @@ public class NavigasiDokter extends AppCompatActivity {
 
         actionBarDrawerToggle.syncState();
 
-        swipeku = (SwipeRefreshLayout) findViewById(R.id.swipeDokter);
+        swipeku = findViewById(R.id.swipeDokter);
         swipeku.setColorSchemeResources(R.color.pink, R.color.indigo, R.color.lime);
         swipeku.setRefreshing(true);
         getData();
@@ -184,8 +182,8 @@ public class NavigasiDokter extends AppCompatActivity {
         );
 
 
-        textViewJumlahAntrian = (TextView) findViewById(R.id.jumlah_antrian);
-        TextView textViewJam = (TextView) findViewById(R.id.txt_jam);
+        textViewJumlahAntrian = findViewById(R.id.jumlah_antrian);
+        TextView textViewJam = findViewById(R.id.txt_jam);
         textViewJam.setText("Update Terakhir: \t" + update_terbaru);
 
 
@@ -195,7 +193,7 @@ public class NavigasiDokter extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         update_terbaru = new SimpleDateFormat("d/M/yyyy - HH:mm", Locale.getDefault()).format(new Date());
-        TextView textViewJam = (TextView) findViewById(R.id.txt_jam);
+        TextView textViewJam = findViewById(R.id.txt_jam);
         textViewJam.setText("Update Terakhir: \t" + update_terbaru);
         swipeku.setRefreshing(true);
         getData();
@@ -207,28 +205,32 @@ public class NavigasiDokter extends AppCompatActivity {
 
     }
 
+
     private void DialogForm() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.form_daftar);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
 
-        dialog.show();
+        Builder = new AlertDialog.Builder(NavigasiDokter.this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.layout_form_daftar, null);
+        Builder.setView(dialogView);
+        Builder.setCancelable(true);
+        Builder.setIcon(R.mipmap.ic_launcher);
+        Builder.setTitle("Form Biodata");
+        btn_daftar = dialogView.findViewById(R.id.dialog_daftar);
+        btn_tutup = dialogView.findViewById(R.id.dialog_tutup);
 
-        btn_daftar = (Button) dialog.findViewById(R.id.dialog_daftar);
-        btn_tutup = (Button) dialog.findViewById(R.id.dialog_tutup);
-        mytoolbar = (Toolbar) dialog.findViewById(R.id.me_toolbar);
-        txt_nama_pasien = (EditText) dialog.findViewById(R.id.txt_nama);
-        txt_nohp_pasien = (EditText) dialog.findViewById(R.id.txt_nohp);
-        mytoolbar.setTitle("Form Biodata");
-        mytoolbar.setNavigationIcon(R.mipmap.ic_launcher);
+
+        txt_nama_pasien = dialogView.findViewById(R.id.txt_nama);
+        txt_nohp_pasien = dialogView.findViewById(R.id.txt_nohp);
+
+        final AlertDialog alertDialog = Builder.show();
+
+
 
         kosong();
 
         btn_daftar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 
                 nama_pasien = txt_nama_pasien.getText().toString();
                 nohp_pasien = txt_nohp_pasien.getText().toString();
@@ -240,7 +242,7 @@ public class NavigasiDokter extends AppCompatActivity {
                     Toasty.info(getApplicationContext(), "Nomor tak boleh kosong", Toast.LENGTH_LONG).show();
                 } else {
 
-
+                    onClickedButton(alertDialog);
                     try {
 
                         tambahPasien();
@@ -249,23 +251,28 @@ public class NavigasiDokter extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    dialog.dismiss();
 
                 }
 
             }
         });
 
+
         btn_tutup.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void onClick(View view) {
+                    onClickedButton(alertDialog);
             }
         });
 
 
-        dialog.show();
     }
+
+    private void onClickedButton(AlertDialog alertDialog) {
+        alertDialog.dismiss();
+    }
+
+
 
     private void tambahPasien() throws JSONException {
 
@@ -322,7 +329,7 @@ public class NavigasiDokter extends AppCompatActivity {
 
         com.android.volley.RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-        // }
+
     }
 
     private void getData() {

@@ -106,7 +106,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.maps_praktik);
+        setContentView(R.layout.activity_maps_praktik);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -128,6 +128,16 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
         mGoogleClient.connect();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 5, mLocationListener);
 
         if (android.os.Build.VERSION.SDK_INT > 15) {
@@ -139,11 +149,11 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
         showMapTypeSelectorDialog();
 
-        textViewJarak = (TextView) findViewById(R.id.txt_jarak);
-        textViewWaktu = (TextView) findViewById(R.id.txt_waktu);
+        textViewJarak = findViewById(R.id.txt_jarak);
+        textViewWaktu = findViewById(R.id.txt_waktu);
 
 
-        ImageView nearMe = (ImageView) findViewById(R.id.img_near_me);
+        ImageView nearMe = findViewById(R.id.img_near_me);
         nearMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,7 +198,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.i("dssds", titik_mulai.getLatitude() + titik_mulai.getLongitude() + "), new LatLng( " + titik_tujuan.getLatitude() + titik_tujuan.getLongitude());
+        //Log.i("dssds", titik_mulai.getLatitude() + titik_mulai.getLongitude() + "), new LatLng( " + titik_tujuan.getLatitude() + titik_tujuan.getLongitude());
         String urll = getDirectionsUrl(new LatLng(titik_mulai.getLatitude(), titik_mulai.getLongitude()), new LatLng(titik_tujuan.getLatitude(), titik_tujuan.getLongitude()));
 
         DownloadTask downloadTask = new DownloadTask();
@@ -200,7 +210,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
     }
 
     private void clickMe() {
-        Log.i("dssds", titik_mulai.getLatitude() + titik_mulai.getLongitude() + "), new LatLng( " + titik_tujuan.getLatitude() + titik_tujuan.getLongitude());
+        //Log.i("dssds", titik_mulai.getLatitude() + titik_mulai.getLongitude() + "), new LatLng( " + titik_tujuan.getLatitude() + titik_tujuan.getLongitude());
         String urll = getDirectionsUrl(new LatLng(titik_mulai.getLatitude(), titik_mulai.getLongitude()), new LatLng(titik_tujuan.getLatitude(), titik_tujuan.getLongitude()));
 
         pDialog = new ProgressDialog(LokasiPraktik.this);
@@ -213,7 +223,6 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
 
     }
-
 
 
     @SuppressWarnings("deprecation")
@@ -234,12 +243,12 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
                     str.append(line);
                 }
             } else {
-                Log.e("Log", "Failed to download result..");
+                //Log.e("Log", "Failed to download result..");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i("aa", str.toString());
+        //Log.i("aa", str.toString());
         return str.toString();
     }
 
@@ -261,7 +270,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
                 intent.putExtra("layanan", lokasipraktek.get(i).get("layanan"));
 
 
-                Log.i("markerid", lokasipraktek.get(i).toString());
+                //Log.i("markerid", lokasipraktek.get(i).toString());
                 startActivity(intent);
 
 
@@ -315,8 +324,6 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
     }
 
 
-
-
     private void getLokasiDokter() {
 
         try {
@@ -352,8 +359,8 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
         //Focus & Zoom
         assert lokasipraktek != null;
-        Double latitude   = parseDouble(lokasipraktek.get(0).get("latitude"));
-        Double longitude  = parseDouble(lokasipraktek.get(0).get("longitude"));
+        Double latitude = parseDouble(lokasipraktek.get(0).get("latitude"));
+        Double longitude = parseDouble(lokasipraktek.get(0).get("longitude"));
         LatLng coordinate = new LatLng(latitude, longitude);
 
         mMap.clear();
@@ -384,15 +391,15 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
                     .snippet(spesial)
                     .icon(BitmapDescriptorFactory
                             .fromResource(icon));
-            Log.i("lat", latitude + "   " + longitude);
+            //Log.i("lat", latitude + "   " + longitude);
             titik_temp.setLatitude(latitude);
             titik_temp.setLongitude(longitude);
 
-            Log.i("ddd", titik_mulai + "ccc" + titik_temp);
+            //Log.i("ddd", titik_mulai + "ccc" + titik_temp);
             if (titik_temp != null && mUserLocation != null) {
                 double jarak_temp = haversine(mUserLocation.getLatitude(), mUserLocation.getLongitude(), titik_temp.getLatitude(), titik_temp.getLongitude());
                 //jarak_temp = titik_mulai.distanceTo(titik_temp);
-                Log.i("ddd", jarak_temp + "-aaaa");
+                //Log.i("ddd", jarak_temp + "-aaaa");
 
                 if (i == 0) {
                     jarak_tempuh = jarak_temp;
@@ -409,7 +416,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
                     }
                 }
 
-                Log.i("ddd", jarak_temp + "-" + jarak_tempuh);
+                //Log.i("ddd", jarak_temp + "-" + jarak_tempuh);
 
             } else {
             }
@@ -419,7 +426,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
             //mMap.addMarker(marker);
             mMarker.add(mMap.addMarker(marker));
         }
-        Log.i("lllat", String.valueOf(mMarker.size()));
+        //Log.i("lllat", String.valueOf(mMarker.size()));
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
@@ -474,7 +481,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
             br.close();
 
         } catch (Exception e) {
-            Log.d("while downloading url", e.toString());
+            //Log.d("while downloading url", e.toString());
         } finally {
             urlConnection.disconnect();
         }
@@ -483,6 +490,16 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mUserLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
 
 
@@ -546,7 +563,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
-                Log.d("Background Task", e.toString());
+                //Log.d("Background Task", e.toString());
             }
             return data;
         }
@@ -641,7 +658,7 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
                 lineOptions.addAll(points);
                 lineOptions.width(4);
-                lineOptions.color(Color.RED);
+                lineOptions.color(Color.BLUE);
             }
 
             textViewJarak.setText(distance);
@@ -703,7 +720,6 @@ public class LokasiPraktik extends AppCompatActivity implements GoogleMap.OnInfo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_filter:
                 fMapTypeDialog.show();

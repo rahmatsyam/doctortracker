@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Introduction"
+            android:name=".config.Introduction"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,10 +53,12 @@
         </activity>
         <activity
             android:name=".LoginDokter"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Akun Dokter"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".DaftarDokter"
-            android:label="Buat Akun" />
+            android:label="Buat Akun"
+            android:windowSoftInputMode="stateHidden"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -72,7 +74,8 @@
 
         <activity
             android:name=".TambahLokasi"
-            android:label="Tambah Lokasi">
+            android:label="Tambah Lokasi"
+            android:windowSoftInputMode="stateHidden">
 
         </activity>
         <activity
@@ -81,7 +84,9 @@
             android:theme="@style/HeroTheme" />
         <activity
             android:name=".LoginPasien"
-            android:theme="@style/HeroTheme.NoActionBar" />
+            android:label="Akun Pasien"
+            android:theme="@style/HeroTheme"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ListPasien"
             android:label="List Pasien" />
@@ -98,7 +103,8 @@
         <activity
             android:name=".DaftarPasien"
             android:label="Buat Akun"
-            android:theme="@style/HeroTheme"/>
+            android:theme="@style/HeroTheme"
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".ProfilDokter"
@@ -111,7 +117,8 @@
         <activity
             android:name=".CekNomorAntrian"
             android:label="Nomor Antrian"
-            android:theme="@style/HeroTheme" />
+            android:theme="@style/HeroTheme"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

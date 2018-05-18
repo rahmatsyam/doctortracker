@@ -1,6 +1,5 @@
 package application.rahmatsyam.doctortracker;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,24 +34,22 @@ import es.dmoral.toasty.Toasty;
 public class ProfilDokter extends AppCompatActivity {
 
     LayoutInflater inflater;
-    // public AlertDialog.Builder dialog;
+    AlertDialog.Builder Builder;
     View dialogView;
-    Button daftarKerabat, daftarDiri;
+
+    Button daftarKerabat, daftarDiri, btn_daftar, btn_tutup;
     EditText txt_nama_pasien, txt_nohp_pasien;
-    Button btn_daftar, btn_tutup;
+
     Toolbar mytoolbar;
 
     SessionManager session;
 
-    String nama_lengkap, no_telp;
-    String nama_pasien, nohp_pasien;
-    String id_dokter, id_lokasi, tgl_registrasi;
-
+    String nama_lengkap, no_telp, nama_pasien, nohp_pasien, id_dokter, id_lokasi, tgl_registrasi;
 
     ProgressDialog pDialog;
 
-
     TextView nama_dokter, noTlpn_praktek, id_spesialisasi, alamat_praktek, hari_praktek, layanan, jam_praktik;
+
 
     String REGISTER_URL = Config.DAFTAR_PASIEN;
     String REGISTER_ME = Config.DAFTAR_DIRI;
@@ -68,23 +63,35 @@ public class ProfilDokter extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profil_dokter);
+        setContentView(R.layout.activity_profil_dokter);
 
 
-        nama_dokter = (TextView) findViewById(R.id.nama_dokter);
-        noTlpn_praktek = (TextView) findViewById(R.id.noTlpn_praktek);
-        id_spesialisasi = (TextView) findViewById(R.id.id_spesialisasi);
-        alamat_praktek = (TextView) findViewById(R.id.alamat_praktek);
-        hari_praktek = (TextView) findViewById(R.id.hari_praktek);
-        layanan = (TextView) findViewById(R.id.layanan);
-        jam_praktik = (TextView) findViewById(R.id.jam_praktik);
+        nama_dokter = findViewById(R.id.nama_dokter);
+        noTlpn_praktek = findViewById(R.id.noTlpn_praktek);
+        id_spesialisasi = findViewById(R.id.id_spesialisasi);
+        alamat_praktek = findViewById(R.id.alamat_praktek);
+        hari_praktek = findViewById(R.id.hari_praktek);
+        layanan = findViewById(R.id.layanan);
+        jam_praktik = findViewById(R.id.jam_praktik);
 
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> Pasien = session.getPasienDetails();
         nama_lengkap = Pasien.get(SessionManager.KEY_NAMA_LENGKAP);
         no_telp = Pasien.get(SessionManager.KEY_NO_TELP);
 
-        daftarKerabat = (Button) findViewById(R.id.btn_dftrKerabat);
+        Bundle bundle = getIntent().getExtras();
+        nama_dokter.setText(bundle.getString("nama_dokter"));
+        noTlpn_praktek.setText(bundle.getString("notlpn_praktek"));
+        id_spesialisasi.setText(bundle.getString("nama_spesialisasi"));
+        alamat_praktek.setText(bundle.getString("alamat_praktek"));
+        hari_praktek.setText(bundle.getString("hari_praktek"));
+
+        jam_praktik.setText((bundle.getString("jam_buka")) + "-" + (bundle.getString("jam_tutup")));
+        layanan.setText(bundle.getString("layanan"));
+        id_dokter = bundle.getString("id_dokter");
+        id_lokasi = bundle.getString("id_lokasi");
+
+        daftarKerabat = findViewById(R.id.btn_dftrKerabat);
         daftarKerabat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,19 +100,7 @@ public class ProfilDokter extends AppCompatActivity {
         });
 
 
-        Bundle bundle = getIntent().getExtras();
-        nama_dokter.setText(bundle.getString("nama_dokter"));
-        noTlpn_praktek.setText(bundle.getString("notlpn_praktek"));
-        id_spesialisasi.setText(bundle.getString("nama_spesialisasi"));
-        alamat_praktek.setText(bundle.getString("alamat_praktek"));
-        hari_praktek.setText(bundle.getString("hari_praktek"));
-        jam_praktik.setText((bundle.getString("jam_buka")) + "-" + (bundle.getString("jam_tutup")));
-        layanan.setText(bundle.getString("layanan"));
-        id_dokter = bundle.getString("id_dokter");
-        id_lokasi = bundle.getString("id_lokasi");
-
-
-        daftarDiri = (Button) findViewById(R.id.dftrDiri);
+        daftarDiri = findViewById(R.id.dftrDiri);
         daftarDiri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,24 +142,25 @@ public class ProfilDokter extends AppCompatActivity {
     }
 
 
-    // untuk menampilkan dialog
     private void DialogForm() {
 
-        final Dialog dialog = new Dialog(ProfilDokter.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.form_daftar);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
+        Builder = new AlertDialog.Builder(this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.layout_form_daftar, null);
+        Builder.setView(dialogView);
+        Builder.setCancelable(true);
 
-        dialog.show();
 
-        btn_daftar = (Button) dialog.findViewById(R.id.dialog_daftar);
-        btn_tutup = (Button) dialog.findViewById(R.id.dialog_tutup);
-        mytoolbar = (Toolbar) dialog.findViewById(R.id.me_toolbar);
-        txt_nama_pasien = (EditText) dialog.findViewById(R.id.txt_nama);
-        txt_nohp_pasien = (EditText) dialog.findViewById(R.id.txt_nohp);
-        mytoolbar.setTitle("Form Biodata");
-        mytoolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        Builder.setIcon(R.mipmap.ic_launcher);
+        Builder.setTitle("Form Biodata");
+
+        btn_daftar = dialogView.findViewById(R.id.dialog_daftar);
+        btn_tutup = dialogView.findViewById(R.id.dialog_tutup);
+        txt_nama_pasien = dialogView.findViewById(R.id.txt_nama);
+        txt_nohp_pasien = dialogView.findViewById(R.id.txt_nohp);
+
+        final AlertDialog alertDialog = Builder.show();
+
 
         kosong();
 
@@ -182,7 +178,7 @@ public class ProfilDokter extends AppCompatActivity {
                     Toasty.info(getApplicationContext(), "Nomor tak boleh kosong", Toast.LENGTH_LONG).show();
                 } else {
 
-
+                    onClickedButton(alertDialog);
                     try {
 
                         daftarPasien();
@@ -191,22 +187,28 @@ public class ProfilDokter extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    dialog.dismiss();
 
                 }
 
             }
         });
 
+
         btn_tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+
+                onClickedButton(alertDialog);
             }
         });
 
 
     }
+
+    private void onClickedButton(AlertDialog alertDialog) {
+        alertDialog.dismiss();
+    }
+
 
     private void daftarPasien() throws JSONException {
 

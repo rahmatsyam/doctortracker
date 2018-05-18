@@ -53,21 +53,21 @@ public class NavigasiPasien extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigasi_pasien);
+        setContentView(R.layout.activity_navigasi_pasien);
 
         session = new SessionManager(getApplicationContext());
-        Toasty.info(getApplicationContext(), "User Login Status: " +
-                session.isLoggedInPasien(), Toast.LENGTH_SHORT, true).show();
+        /*Toasty.info(getApplicationContext(), "User Login Status: " +
+                session.isLoggedInPasien(), Toast.LENGTH_SHORT, true).show(); */
         session.checkLoginPasien();
 
         HashMap<String, String> Pasien = session.getPasienDetails();
         nama_lengkap = Pasien.get(SessionManager.KEY_NAMA_LENGKAP);
         no_telp = Pasien.get(SessionManager.KEY_NO_TELP);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view2);
+        NavigationView navigationView = findViewById(R.id.navigation_view2);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -110,7 +110,7 @@ public class NavigasiPasien extends AppCompatActivity implements View.OnClickLis
         notelp.setText(no_telp);
 
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        drawerLayout = findViewById(R.id.drawer2);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -129,7 +129,7 @@ public class NavigasiPasien extends AppCompatActivity implements View.OnClickLis
 
         actionBarDrawerToggle.syncState();
 
-        mySwipe = (SwipeRefreshLayout) findViewById(R.id.swipePasien);
+        mySwipe = findViewById(R.id.swipePasien);
         mySwipe.setColorSchemeResources(R.color.pink,R.color.indigo,R.color.lime);
         mySwipe.setRefreshing(true);
         getData();
@@ -144,11 +144,11 @@ public class NavigasiPasien extends AppCompatActivity implements View.OnClickLis
                 }
         );
 
-        textViewNoAntrian = (TextView) findViewById(R.id.txt_no_antrian1);
-        textViewNamaPasien = (TextView) findViewById(R.id.txt_nama_pasien1);
-        textViewNamaDokter = (TextView) findViewById(R.id.txt_nama_dokter1);
+        textViewNoAntrian = findViewById(R.id.txt_no_antrian1);
+        textViewNamaPasien = findViewById(R.id.txt_nama_pasien1);
+        textViewNamaDokter = findViewById(R.id.txt_nama_dokter1);
 
-        Direction = (FloatingActionButton) findViewById(R.id.fab_direction);
+        Direction = findViewById(R.id.fab_direction);
         Direction.setOnClickListener(this);
 
 
@@ -240,13 +240,7 @@ public class NavigasiPasien extends AppCompatActivity implements View.OnClickLis
 
                         }
                     })
-
-                    .setNegativeButton("Tutup", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            //  pDialog.dismiss();
-
-                        }
-                    }).setIcon(R.mipmap.ic_launcher).show();
+                    .setIcon(R.mipmap.ic_launcher).show();
 
         } else {
             if (pDialog.isShowing()) {

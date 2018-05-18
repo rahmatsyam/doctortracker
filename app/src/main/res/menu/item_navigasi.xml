@@ -4,24 +4,24 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/nav_listPasien"
-            android:icon="@drawable/ic_menu_list"
+            android:icon="@drawable/ic_menu_list_24dp"
             android:checked="false"
             android:title="List Pasien"/>
 
         <item
             android:id="@+id/nav_tambahKlinik"
-            android:icon="@drawable/ic_menu_klinik"
+            android:icon="@drawable/ic_menu_klinik_24dp"
             android:checked="false"
-            android:title="Tambah Klinik"/>
+            android:title="Tambah Lokasi Praktik"/>
 
         <item
             android:id="@+id/nav_tmbhPasien"
-            android:icon="@drawable/ic_menu_add"
+            android:icon="@drawable/ic_menu_add_24dp"
             android:checked="false"
             android:title="Tambah Pasien"/>
         <item
             android:id="@+id/nav_signout"
-            android:icon="@drawable/ic_menu_signout"
+            android:icon="@drawable/ic_menu_signout_24dp"
             android:checked="false"
             android:title="Sign Out" />
 
